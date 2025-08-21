@@ -746,9 +746,9 @@ def send_notification(all_results: List[str]):
         return
         
     final_content = "\n\n".join(all_results)
-    access_token = '1ca9667593b6667f566ab74b9086ea776aa3efb2f7272efa7e32dce720e87cef'
+    access_token = ''
     webhook = f'https://oapi.dingtalk.com/robot/send?access_token={access_token}'
-    secret = 'SEC965c50f4231b44cbb9f02ee4f9962edc30bf75993fa4b2948701b2c92143fd91'
+    secret = ''
     
     if not webhook or not secret:
         logger.warning("未配置钉钉机器人的 WEBHOOK 或 SECRET，跳过通知。")
