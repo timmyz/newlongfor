@@ -3,10 +3,12 @@ version: '3.8'
 services:
   longfor-signin:
     image: ghcr.io/langchou/newlongfor:latest
-    container_name: longfor-signin-app
+    container_name: longfor
     restart: unless-stopped
     ports:
       - "5900:5900"
+    env_file:
+      - .env  # 直接加载.env文件
     environment:
       - FLASK_ENV=production
       - TURNSTILE_ENABLED=${TURNSTILE_ENABLED:-false}

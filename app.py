@@ -69,6 +69,9 @@ def verify_turnstile(token):
     """验证 Turnstile token"""
     # 先检查配置文件
     if TURNSTILE_ENABLED and TURNSTILE_SECRET_KEY:
+        # 如果启用了但没有token，验证失败
+        if not token:
+            return False
         secret_key = TURNSTILE_SECRET_KEY
     else:
         # 再从数据库获取配置
@@ -80,6 +83,10 @@ def verify_turnstile(token):
             # 如果未启用或没有配置密钥，跳过验证
             if enabled != 'true' or not secret_key:
                 return True  # 未配置则跳过验证
+            
+            # 如果启用了但没有token，验证失败
+            if not token:
+                return False
         finally:
             db.close()
     
@@ -94,9 +101,9 @@ def verify_turnstile(token):
     except Exception:
         return False  # 验证失败时拒绝
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST', 'HEAD'])
 def login():
-    if request.method == 'GET':
+    if request.method in ['GET', 'HEAD']:
         # 优先使用配置文件
         if TURNSTILE_ENABLED and TURNSTILE_SITE_KEY:
             site_key = TURNSTILE_SITE_KEY

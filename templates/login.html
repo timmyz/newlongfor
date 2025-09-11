@@ -142,16 +142,21 @@
             const alertContainer = document.getElementById('alertContainer');
             
             // 获取 Turnstile token
-            const turnstileResponse = turnstile.getResponse();
-            if (!turnstileResponse) {
-                alertContainer.innerHTML = `
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle me-2"></i>请完成安全验证
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                `;
-                return;
+            let turnstileResponse = '';
+            {% if turnstile_enabled and turnstile_site_key %}
+            if (typeof turnstile !== 'undefined') {
+                turnstileResponse = turnstile.getResponse();
+                if (!turnstileResponse) {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle me-2"></i>请完成安全验证
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `;
+                    return;
+                }
             }
+            {% endif %}
             
             try {
                 const response = await fetch('/api/login', {
@@ -179,7 +184,11 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                     `;
-                    turnstile.reset();
+                    {% if turnstile_enabled and turnstile_site_key %}
+                    if (typeof turnstile !== 'undefined') {
+                        turnstile.reset();
+                    }
+                    {% endif %}
                 }
             } catch (error) {
                 alertContainer.innerHTML = `
