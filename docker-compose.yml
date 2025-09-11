@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  longfor-signin:
+    build: .
+    container_name: longfor-signin-app
+    restart: unless-stopped
+    ports:
+      - "5900:5900"
+    environment:
+      - FLASK_ENV=production
+      - TURNSTILE_ENABLED=${TURNSTILE_ENABLED:-false}
+      - TURNSTILE_SITE_KEY=${TURNSTILE_SITE_KEY:-}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY:-}
+    volumes:
+      - ./data:/app/data  # 数据目录
+      - ./config.py:/app/config.py:ro  # 配置文件（可选）
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5900/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -30,3 +30,11 @@ class Setting(Base):
 
     key = Column(String, primary_key=True, index=True)
     value = Column(String)
+
+class Admin(Base):
+    __tablename__ = "admins"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, nullable=False, default="admin")
+    password_hash = Column(String, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
