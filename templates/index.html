@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙湖签到管理</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="bi bi-calendar2-check-fill me-2"></i>龙湖天街签到管理平台</a>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-panel" type="button" role="tab">用户管理</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings-panel" type="button" role="tab">通知设置</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="mainTabsContent">
+            <!-- Users Panel -->
+            <div class="tab-pane fade show active" id="users-panel" role="tabpanel">
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">用户列表</h5>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" id="addUserBtn"><i class="bi bi-plus-circle me-1"></i>添加用户</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>用户名</th>
+                                        <th>账号ID</th>
+                                        <th>启用状态</th>
+                                        <th>计划签到</th>
+                                        <th>上次签到时间</th>
+                                        <th>上次签到状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="tab-pane fade" id="settings-panel" role="tabpanel">
+                <div class="card mt-3 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">钉钉机器人设置</h5>
+                        <form id="settingsForm">
+                            <div class="mb-3">
+                                <label for="dingtalk_webhook" class="form-label">Webhook 地址</label>
+                                <input type="url" class="form-control" id="dingtalk_webhook" placeholder="请输入钉钉机器人的 Webhook 地址">
+                            </div>
+                            <div class="mb-3">
+                                <label for="dingtalk_secret" class="form-label">加签密钥 (Secret)</label>
+                                <input type="text" class="form-control" id="dingtalk_secret" placeholder="请输入钉钉机器人的加签密钥">
+                            </div>
+                            <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>保存设置</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- User Modal (same as before, just placing it here) -->
+    <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <input type="hidden" id="userId">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">用户名</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="account_id" class="form-label">账号ID (手机号)</label>
+                                <input type="text" class="form-control" id="account_id" required>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6>认证信息</h6>
+                        <div class="row">
+                             <div class="col-md-12 mb-3">
+                                <label for="token" class="form-label">token</label>
+                                <input type="text" class="form-control" id="token" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="x-lf-usertoken" class="form-label">x-lf-usertoken</label>
+                                <input type="text" class="form-control" id="x-lf-usertoken" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="cookie" class="form-label">Cookie</label>
+                                <textarea class="form-control" id="cookie" rows="3"></textarea>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="x-lf-dxrisk-token" class="form-label">x-lf-dxrisk-token</label>
+                                <textarea class="form-control" id="x-lf-dxrisk-token" rows="2"></textarea>
+                            </div>
+                             <div class="col-md-4 mb-3">
+                                <label for="x-lf-channel" class="form-label">x-lf-channel</label>
+                                <input type="text" class="form-control" id="x-lf-channel" value="L0">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="x-lf-bu-code" class="form-label">x-lf-bu-code</label>
+                                <input type="text" class="form-control" id="x-lf-bu-code" value="L00602">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="x-lf-dxrisk-source" class="form-label">x-lf-dxrisk-source</label>
+                                <input type="text" class="form-control" id="x-lf-dxrisk-source" value="2">
+                            </div>
+                        </div>
+                        <hr>
+                        <h6>任务设置</h6>
+                        <div class="row align-items-end">
+                            <div class="col-md-6 mb-3">
+                                <label for="checkin_time" class="form-label">每日签到时间</label>
+                                <input type="time" class="form-control" id="checkin_time" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="is_active" checked>
+                                    <label class="form-check-label" for="is_active">启用自动签到</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary" form="userForm"><i class="bi bi-save me-1"></i>保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+:root {
+    --bs-primary-rgb: 71, 85, 105; /* Slate 600 */
+    --bs-primary: #475569;
+}
+
+body {
+    background-color: #f1f5f9; /* Slate 100 */
+}
+
+.navbar {
+    background-color: var(--bs-primary) !important;
+}
+
+.nav-tabs .nav-link {
+    color: #64748b; /* Slate 500 */
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--bs-primary);
+    font-weight: 500;
+}
+
+.card {
+    border: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8fafc; /* Slate 50 */
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background-color: #334155; /* Slate 700 */
+    border-color: #334155;
+}
+
+.modal-body h6 {
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0; /* Slate 200 */
+    padding-bottom: 0.5rem;
+    color: var(--bs-primary);
+}
