@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   longfor-signin:
-    build: .
+    image: ghcr.io/langchou/newlongfor:latest
     container_name: longfor-signin-app
     restart: unless-stopped
     ports:
