@@ -279,4 +279,4 @@ def update_turnstile_api():
 if __name__ == '__main__':
     scheduler.initialize_scheduler(app)
     # 生产环境建议设置 debug=False
-    app.run(debug=False, port=5900, use_reloader=False)
+    app.run(debug=False, host='0.0.0.0', port=5900, use_reloader=False)
