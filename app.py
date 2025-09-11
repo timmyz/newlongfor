@@ -29,11 +29,17 @@ def init_admin():
     try:
         admin = db.query(Admin).first()
         if not admin:
-            password_hash = hashlib.sha256('admin'.encode()).hexdigest()
-            default_admin = Admin(username='admin', password_hash=password_hash)
-            db.add(default_admin)
-            db.commit()
-            print("Default admin account created: admin/admin")
+            try:
+                password_hash = hashlib.sha256('admin'.encode()).hexdigest()
+                default_admin = Admin(username='admin', password_hash=password_hash)
+                db.add(default_admin)
+                db.commit()
+                print("Default admin account created: admin/admin")
+            except Exception as e:
+                db.rollback()
+                # 忽略重复创建错误（多个worker同时启动时）
+                if "UNIQUE constraint failed" not in str(e):
+                    print(f"Error creating admin account: {e}")
     finally:
         db.close()
 
