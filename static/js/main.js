@@ -10,12 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsForm = document.getElementById('settingsForm');
     const dingtalkWebhookInput = document.getElementById('dingtalk_webhook');
     const dingtalkSecretInput = document.getElementById('dingtalk_secret');
-    
-    // Turnstile Elements
-    const turnstileForm = document.getElementById('turnstileForm');
-    const turnstileEnabledInput = document.getElementById('turnstile_enabled');
-    const turnstileSiteKeyInput = document.getElementById('turnstile_site_key');
-    const turnstileSecretKeyInput = document.getElementById('turnstile_secret_key');
 
     const API_USERS_URL = '/api/users';
     const API_SETTINGS_URL = '/api/settings';
@@ -28,9 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const settings = await response.json();
             dingtalkWebhookInput.value = settings.dingtalk_webhook || '';
             dingtalkSecretInput.value = settings.dingtalk_secret || '';
-            turnstileEnabledInput.checked = settings.turnstile_enabled || false;
-            turnstileSiteKeyInput.value = settings.turnstile_site_key || '';
-            turnstileSecretKeyInput.value = settings.turnstile_secret_key || '';
         } catch (error) {
             console.error('Error fetching settings:', error);
         }
@@ -53,28 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error saving settings:', error);
             alert('保存通知设置失败。');
-        }
-    });
-
-    // --- Turnstile Settings ---
-    turnstileForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const turnstileData = {
-            turnstile_enabled: turnstileEnabledInput.checked,
-            turnstile_site_key: turnstileSiteKeyInput.value,
-            turnstile_secret_key: turnstileSecretKeyInput.value,
-        };
-        try {
-            const response = await fetch('/api/turnstile', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(turnstileData),
-            });
-            if (!response.ok) throw new Error('Failed to save Turnstile settings');
-            alert('Turnstile 设置已保存！');
-        } catch (error) {
-            console.error('Error saving Turnstile settings:', error);
-            alert('保存 Turnstile 设置失败。');
         }
     });
 

@@ -260,16 +260,10 @@ def change_password_api():
 def get_settings_api():
     webhook = crud.get_setting(request.db, 'dingtalk_webhook') or ''
     secret = crud.get_setting(request.db, 'dingtalk_secret') or ''
-    turnstile_enabled = crud.get_setting(request.db, 'turnstile_enabled') == 'true'
-    turnstile_site_key = crud.get_setting(request.db, 'turnstile_site_key') or ''
-    turnstile_secret_key = crud.get_setting(request.db, 'turnstile_secret_key') or ''
     
     return jsonify({
         'dingtalk_webhook': webhook, 
-        'dingtalk_secret': secret,
-        'turnstile_enabled': turnstile_enabled,
-        'turnstile_site_key': turnstile_site_key,
-        'turnstile_secret_key': turnstile_secret_key
+        'dingtalk_secret': secret
     })
 
 @app.route('/api/settings', methods=['POST'])
@@ -279,15 +273,6 @@ def update_settings_api():
     crud.update_setting(request.db, 'dingtalk_webhook', data.get('dingtalk_webhook', ''))
     crud.update_setting(request.db, 'dingtalk_secret', data.get('dingtalk_secret', ''))
     return jsonify({"message": "Settings updated"})
-
-@app.route('/api/turnstile', methods=['POST'])
-@login_required
-def update_turnstile_api():
-    data = request.get_json()
-    crud.update_setting(request.db, 'turnstile_enabled', 'true' if data.get('turnstile_enabled') else 'false')
-    crud.update_setting(request.db, 'turnstile_site_key', data.get('turnstile_site_key', ''))
-    crud.update_setting(request.db, 'turnstile_secret_key', data.get('turnstile_secret_key', ''))
-    return jsonify({"message": "Turnstile settings updated"})
 
 if __name__ == '__main__':
     scheduler.initialize_scheduler(app)
