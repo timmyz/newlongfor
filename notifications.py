@@ -14,7 +14,7 @@ def send_notification(webhook: str, secret: str, message: str):
         bot = DingtalkChatbot(webhook, secret=secret)
         
         # Send message
-        bot.send_text(msg=f"[龙湖签到通知]\n\n{message}", is_at_all=False)
+        bot.send_text(msg=f"[签到通知]\n\n{message}", is_at_all=False)
         logging.info("Successfully sent DingTalk notification.")
     except Exception as e:
         logging.error(f"Failed to send DingTalk notification: {e}")
