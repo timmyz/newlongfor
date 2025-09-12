@@ -4,4 +4,3 @@ apscheduler
 requests
 cryptography
 dingtalkchatbot
-gunicorn

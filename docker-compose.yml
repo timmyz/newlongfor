@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   longfor-signin:
     image: ghcr.io/langchou/newlongfor:latest
